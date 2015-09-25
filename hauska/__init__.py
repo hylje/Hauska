@@ -1,8 +1,7 @@
 # -*- encoding: utf-8 -*-
 import sqlite3
 
-from flask import Flask
-
+from flask import Flask, g
 
 app = Flask("hauska")
 
@@ -13,6 +12,7 @@ app.config.from_envvar('HAUSKA_SETTINGS', silent=True)
 # Tietokantatyökalut
 _db = None
 
+
 def db_connection():
     global _db
 
@@ -21,17 +21,37 @@ def db_connection():
 
     return _db
 
+
+def connect_db():
+    """Connects to the specific database."""
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
+    return rv
+
+
 def init_db():
-    """Alustaa (tyhjän) tietokannan SQL-tiedostosta pakettihakemistosta"""
-
-    from contextlib import closing
-
-    db = db_connection()
-
-    with app.open_resource("schema.sql", mode="r") as f:
+    """Initializes the database."""
+    db = get_db()
+    with app.open_resource('schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
-
     db.commit()
+
+
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    if not hasattr(g, 'sqlite_db'):
+        g.sqlite_db = connect_db()
+    return g.sqlite_db
+
+
+@app.teardown_appcontext
+def close_db(error):
+    """Closes the database again at the end of the request."""
+    if hasattr(g, 'sqlite_db'):
+        g.sqlite_db.close()
+
 
 # Kaikki view-moduulit pitää importtaa, jotta ne liitetään app-objektiin
 import hauska.views

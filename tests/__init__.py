@@ -11,3 +11,4 @@ class HauskaTestCase(unittest.TestCase):
         hauska.app.config['TESTING'] = True
         self.app = hauska.app.test_client()
         hauska.init_db()
+
