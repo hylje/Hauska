@@ -21,7 +21,7 @@ def refs():
     return render_template("refs.html",refs=refs)
 
 class ArticleForm(Form):
-    title = TextField("Otsikko")
+    bibtexkey = TextField("Anna viitteelle nimi:")
 
 @app.route("/add", methods=["GET", "POST"])
 def add_article():
@@ -29,7 +29,7 @@ def add_article():
     form = ArticleForm(request.form)
     if request.method == "POST" and form.validate():
         cur = db.cursor()
-        cur.execute("INSERT INTO refs (bibtexkey) VALUES (?)", [form.title.data])
+        cur.execute("INSERT INTO refs (bibtexkey) VALUES (?)", [form.bibtexkey.data])
         db.commit()
         return redirect("/add/%d" % cur.lastrowid)
     return render_template("add_article.html", form=form)
