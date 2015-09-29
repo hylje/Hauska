@@ -15,13 +15,13 @@ def hello():
 @app.route("/refs")
 def refs():
     db=get_db()
-    cur = db.execute('select refid,title from refs ORDER BY refid asc')
-    refs = [dict(refid=row[0], title=row[1]) for row in cur.fetchall()]
+    cur = db.execute('select refid, bibtexkey from refs ORDER BY refid asc')
+    refs = [dict(refid=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     print refs
     return render_template("refs.html",refs=refs)
 
 class ArticleForm(Form):
-    title = TextField("Otsikko")
+    bibtexkey = TextField("Anna viitteelle nimi:")
 
 @app.route("/add", methods=["GET", "POST"])
 def add_article():
@@ -29,13 +29,14 @@ def add_article():
     form = ArticleForm(request.form)
     if request.method == "POST" and form.validate():
         cur = db.cursor()
-        cur.execute("INSERT INTO refs (title) VALUES (?)", [form.title.data])
+        cur.execute("INSERT INTO refs (bibtexkey) VALUES (?)", [form.bibtexkey.data])
         db.commit()
         return redirect("/add/%d" % cur.lastrowid)
     return render_template("add_article.html", form=form)
 
 class ReferenceForm(Form):
     author = TextField("Kirjoittaja")
+    title = TextField("Otsikko")
     journal = TextField("Journal")
     year = IntegerField("Vuosi")
     volume = IntegerField("Vuosikerta")
@@ -43,7 +44,6 @@ class ReferenceForm(Form):
     pages = TextField("Sivut")
     month = IntegerField("Kuukausi")
     note = TextField("Huomio")
-    key = TextField("Key")
 
 @app.route("/add/<int:refs_id>", methods=["GET", "POST"])
 def add_reference(refs_id):
@@ -51,13 +51,12 @@ def add_reference(refs_id):
     form = ReferenceForm(request.form)
     if request.method == "POST" and form.validate():
         db.execute("""INSERT INTO articles
-        (refid, author, journal, year, volume, number, pages, month, note, key)
+        (refid, author, title, journal, year, volume, number, pages, month, note)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
-                   [refs_id, form.author.data, form.journal.data,
+                   [refs_id, form.author.data, form.title.data, form.journal.data,
                    form.year.data, form.volume.data, form.number.data,
-                   form.pages.data, form.month.data, form.note.data,
-                    form.key.data])
+                   form.pages.data, form.month.data, form.note.data])
         db.commit()
         return redirect("/refs")
     return render_template("add_reference.html", form=form)
