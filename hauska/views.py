@@ -6,11 +6,7 @@ from wtforms import Form, IntegerField, TextField
 
 @app.route("/")
 def hello():
-    return """<h1>Hello World!</h1>
-
-    <p><a href="/refs">Selaa</a></p>
-    <p><a href="/add">Lisää</a></p>
-    """
+    return render_template("index.html")
     
 @app.route("/article/<id>")
 def view_article(id):
@@ -80,7 +76,7 @@ def list_refs():
 class ArticleForm(Form):
     bibtexkey = TextField("Anna viitteelle nimi:")
 
-@app.route("/add", methods=["GET"])
+@app.route("/add")
 def add_reference():
     #db=get_db()
     #form = ArticleForm(request.form)

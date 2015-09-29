@@ -2,6 +2,9 @@
 {% from "_formhelpers.html" import render_field %}
 
 <h1>Add an article</h1>
+
+<a href="/add">Back</a>
+
 <form method="post" action="">
   <dl>
     {{ render_field(form.bibtexkey) }}
