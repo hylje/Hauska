@@ -6,3 +6,4 @@ from os.path import dirname, abspath, join
 PROJECT_DIR = dirname(dirname(abspath(__file__)))
 
 DATABASE = join(PROJECT_DIR, "hauska.sqlite")
+DEBUG = True

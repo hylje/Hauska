@@ -1,0 +1,11 @@
+{% from "_formhelpers.html" import render_field %}
+
+<!doctype html>
+<h1>Uusi Artikkeli</h1>
+
+<form method="post" action="">
+  <dl>
+    {{ render_field(form.title) }}
+  </dl>
+  <input type="submit" value="Luo">
+</form>
