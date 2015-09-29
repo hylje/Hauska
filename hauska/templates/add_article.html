@@ -1,11 +1,21 @@
+<!doctype html>
 {% from "_formhelpers.html" import render_field %}
 
-<!doctype html>
-<h1>Uusi Artikkeli</h1>
-
+<h1>Add an article</h1>
 <form method="post" action="">
   <dl>
     {{ render_field(form.bibtexkey) }}
+    {{ render_field(form.author) }}
+    {{ render_field(form.title) }}
+    {{ render_field(form.journal) }}
+    {{ render_field(form.year) }}
+    {{ render_field(form.volume) }}
+    {{ render_field(form.number) }}
+    {{ render_field(form.pages) }}
+    {{ render_field(form.month) }}
+    {{ render_field(form.note) }}
   </dl>
-  <input type="submit" value="Luo">
+  <p>
+    <input type="submit" value="Lisää">
+  </p>
 </form>

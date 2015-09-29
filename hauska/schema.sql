@@ -1,10 +1,6 @@
-CREATE TABLE IF NOT EXISTS refs (
-    refid integer primary key autoincrement,
-    bibtexkey text not null
-);
 CREATE TABLE IF NOT EXISTS articles (
-    articleid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     journal text not null,
@@ -16,8 +12,8 @@ CREATE TABLE IF NOT EXISTS articles (
     note text
 );
 CREATE TABLE IF NOT EXISTS books (
-    bookid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     title text not null,
     author text, -- joko author tai editor pitää olla
     editor text, -- tarkistus softan puolella?
@@ -32,8 +28,8 @@ CREATE TABLE IF NOT EXISTS books (
     note text
 );
 CREATE TABLE IF NOT EXISTS booklets (
-    bookletid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     title text not null,
     author text,
     howpublished text,
@@ -43,8 +39,8 @@ CREATE TABLE IF NOT EXISTS booklets (
     note text
 );
 CREATE TABLE IF NOT EXISTS conferences (
-    conferenceid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     booktitle text not null,
@@ -61,8 +57,8 @@ CREATE TABLE IF NOT EXISTS conferences (
     note text
 );
 CREATE TABLE IF NOT EXISTS inbooks (
-    inbookid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text, -- joko author tai editor pitää olla
     editor text, -- 
     title text not null,
@@ -80,8 +76,8 @@ CREATE TABLE IF NOT EXISTS inbooks (
     note text
 );
 CREATE TABLE IF NOT EXISTS incollections (
-    incollectionid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     booktitle text not null,
@@ -99,8 +95,8 @@ CREATE TABLE IF NOT EXISTS incollections (
     month int
 );
 CREATE TABLE IF NOT EXISTS inproceedings (
-    inproceedingid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     booktitle text not null,
@@ -117,8 +113,8 @@ CREATE TABLE IF NOT EXISTS inproceedings (
     note text
 );
 CREATE TABLE IF NOT EXISTS manuals (
-    manualid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     title text not null,
     author text,
     organization text,
@@ -129,8 +125,8 @@ CREATE TABLE IF NOT EXISTS manuals (
     note text
 );
 CREATE TABLE IF NOT EXISTS masterstheses ( --theses oikea monikko
-    mastersthesisid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     school text not null,
@@ -141,8 +137,8 @@ CREATE TABLE IF NOT EXISTS masterstheses ( --theses oikea monikko
     note text
 );
 CREATE TABLE IF NOT EXISTS miscs (
-    miscid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text,
     title text,
     howpublished text,
@@ -151,8 +147,8 @@ CREATE TABLE IF NOT EXISTS miscs (
     note text
 );
 CREATE TABLE IF NOT EXISTS phdtheses (
-    mastersthesisid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     school text not null,
@@ -163,8 +159,8 @@ CREATE TABLE IF NOT EXISTS phdtheses (
     note text
 );
 CREATE TABLE IF NOT EXISTS proceedings (
-    proceedingid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     title text not null,
     year int not null,
     editor text,
@@ -178,8 +174,8 @@ CREATE TABLE IF NOT EXISTS proceedings (
     note text
 );
 CREATE TABLE IF NOT EXISTS techreports (
-    techreportid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     institution text not null,
@@ -191,8 +187,8 @@ CREATE TABLE IF NOT EXISTS techreports (
     note text
 );
 CREATE TABLE IF NOT EXISTS unpublished (
-    unpublishedid integer primary key autoincrement,
-    refid integer references refs(refid),
+    id integer primary key autoincrement,
+    bibtexkey text not null,
     author text not null,
     title text not null,
     note text not null,
