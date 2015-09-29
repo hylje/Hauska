@@ -5,6 +5,7 @@
 <form method="post" action="">
   <dl>
     {{ render_field(form.author) }}
+    {{ render_field(form.title) }}
     {{ render_field(form.journal) }}
     {{ render_field(form.year) }}
     {{ render_field(form.volume) }}
@@ -12,7 +13,6 @@
     {{ render_field(form.pages) }}
     {{ render_field(form.month) }}
     {{ render_field(form.note) }}
-    {{ render_field(form.key) }}
   </dl>
   <p>
     <input type="submit" value="Lisää">
