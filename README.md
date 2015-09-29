@@ -8,6 +8,7 @@ Asenna:
 
 * Python (versio 2.7). Python on valmiiksi asennettu useimmissa Linuxeissa ja Maceissa.
 * Flask (http://flask.pocoo.org/docs/0.10/installation/)
+* WTForms
 
 Loput käytetyt jutut tulevat Pythonin mukana, tässä niiden dokumentaatio:
 
