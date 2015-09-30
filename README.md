@@ -3,6 +3,8 @@ Miniohtuprojekti "Hauska"
 
 [![Build Status](https://travis-ci.org/hylje/Hauska.svg?branch=master)](https://travis-ci.org/hylje/Hauska)
 
+[Projektin Trello-lauta](https://trello.com/b/RsZjXJTB/hauska-ryhma)
+
 Asenna:
 ---
 
