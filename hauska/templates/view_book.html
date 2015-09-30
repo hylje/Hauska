@@ -1,0 +1,25 @@
+<!doctype html>
+
+{% if ref %}
+<h1>Book {{ ref.bibtexkey }}</h1>
+
+<a href="/refs">Back</a>
+
+<ul>
+    <li>title = {{ ref.title }}</li>
+    <li>author = {{ ref.author }}</li>
+    <li>editor = {{ ref.editor }}</li>
+    <li>publisher = {{ ref.publisher }}</li>
+    <li>year = {{ ref.year }}</li>
+    <li>volume = {{ ref.volume }}</li>
+    <li>number = {{ ref.number }}</li>
+    <li>series = {{ ref.series }}</li>
+    <li>address = {{ ref.address }}</li>
+    <li>edition = {{ ref.edition }}</li>
+    <li>month = {{ ref.month }}</li>
+    <li>note = {{ ref.note }}</li>
+</ul>
+
+{% else %}
+<h1>Book does not exist for some reason. Sorry about that.</h1>
+{% endif %}

@@ -1,7 +1,7 @@
 <!doctype html>
 {% from "_formhelpers.html" import render_field %}
 
-<h1>Add an article</h1>
+<h1>Add a Booklet</h1>
 
 <a href="/add">Back</a>
 
@@ -10,12 +10,10 @@
     {{ render_field(form.bibtexkey) }}
     {{ render_field(form.author) }}
     {{ render_field(form.title) }}
-    {{ render_field(form.journal) }}
-    {{ render_field(form.year) }}
-    {{ render_field(form.volume) }}
-    {{ render_field(form.number) }}
-    {{ render_field(form.pages) }}
+    {{ render_field(form.howpublished) }}
+    {{ render_field(form.address) }}
     {{ render_field(form.month) }}
+    {{ render_field(form.year) }}
     {{ render_field(form.note) }}
   </dl>
   <p>

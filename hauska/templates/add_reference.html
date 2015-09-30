@@ -1,20 +1,23 @@
-<!doctype html>
 {% from "_formhelpers.html" import render_field %}
 
-<h1>Lisää Viite</h1>
-<form method="post" action="">
-  <dl>
-    {{ render_field(form.author) }}
-    {{ render_field(form.title) }}
-    {{ render_field(form.journal) }}
-    {{ render_field(form.year) }}
-    {{ render_field(form.volume) }}
-    {{ render_field(form.number) }}
-    {{ render_field(form.pages) }}
-    {{ render_field(form.month) }}
-    {{ render_field(form.note) }}
-  </dl>
-  <p>
-    <input type="submit" value="Lisää">
-  </p>
-</form>
+<!doctype html>
+<h1>Add New Reference</h1>
+<a href="/">Back to Index</a>
+<p><h2>Choose reference type</h2>
+    <ul>
+    <li><a href = "/add/article">Add an article</a></li>
+    <li><a href = "/add/book">Add a book</a></li>
+    <li><a href = "/add/booklet">Add a booklet</a></li>
+    <li><a href = "/add/conference">Add a conference</a></li>
+    <li><a href = "/add/inbook">Add an inbook</a></li>
+    <li><a href = "/add/incollection">Add an incollection</a></li>
+    <li><a href = "/add/inproceeding">Add an inproceeding</a></li>
+    <li><a href = "/add/manual">Add a manual</a></li>
+    <li><a href = "/add/mastersthesis">Add a masters thesis</a></li>
+    <li><a href = "/add/phdthesis">Add a phd thesis</a></li>
+    <li><a href = "/add/proceeding">Add a proceeding</a></li>
+    <li><a href = "/add/techreport">Add a techreport</a></li>
+    <li><a href = "/add/unpublished">Add an unpublished work</a></li>
+    <li><a href = "/add/misc">Add something not fit for above categories</a></li>
+    </ul>
+</p>
