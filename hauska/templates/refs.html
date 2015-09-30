@@ -15,7 +15,7 @@
 <p>Books</p>
 <ul>
 {% for ref in books %}
-    <li>{{ ref }}</li>
+    <li><a href="/book/{{ ref.id }}">id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -24,7 +24,7 @@
 <p>Booklets</p>
 <ul>
 {% for ref in booklets %}
-    <li>{{ ref }}</li>
+    <li><a href="/booklet/{{ ref.id }}">id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -33,7 +33,7 @@
 <p>Conferences</p>
 <ul>
 {% for ref in conferences %}
-    <li>{{ ref }}</li>
+    <li><a href="/conference/{{ ref.id }}">id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -42,7 +42,7 @@
 <p>Inbooks</p>
 <ul>
 {% for ref in inbooks %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -51,7 +51,7 @@
 <p>Incollections</p>
 <ul>
 {% for ref in incollections %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -60,7 +60,7 @@
 <p>Inproceedings</p>
 <ul>
 {% for ref in inproceedings %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -69,7 +69,7 @@
 <p>Manuals</p>
 <ul>
 {% for ref in manuals %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -78,7 +78,7 @@
 <p>Masters theses</p>
 <ul>
 {% for ref in masterstheses %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -87,7 +87,7 @@
 <p>Phd theses</p>
 <ul>
 {% for ref in phdtheses %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -96,7 +96,7 @@
 <p>Proceedings</p>
 <ul>
 {% for ref in proceedings %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -105,7 +105,7 @@
 <p>Techreports</p>
 <ul>
 {% for ref in techreports %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -114,7 +114,7 @@
 <p>Unpublished</p>
 <ul>
 {% for ref in unpublished %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}
@@ -123,7 +123,7 @@
 <p>Miscellaneous</p>
 <ul>
 {% for ref in miscs %}
-    <li>{{ ref }}</li>
+    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}

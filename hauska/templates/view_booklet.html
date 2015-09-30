@@ -1,0 +1,20 @@
+<!doctype html>
+
+{% if ref %}
+<h1>Booklet {{ ref.bibtexkey }}</h1>
+
+<a href="/refs">Back</a>
+
+<ul>
+    <li>title = {{ ref.title }}</li>
+    <li>author = {{ ref.author }}</li>
+    <li>how published = {{ ref.howpublished }}</li>
+    <li>address = {{ ref.address }}</li>
+    <li>month = {{ ref.month }}</li>
+    <li>year = {{ ref.year }}</li>
+    <li>note = {{ ref.note }}</li>
+</ul>
+
+{% else %}
+<h1>Booklet does not exist for some reason. Sorry about that.</h1>
+{% endif %}

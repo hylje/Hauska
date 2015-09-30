@@ -26,6 +26,66 @@ def view_article(id):
                     note=row[10]) for row in cur.fetchall()]
     return render_template("view_article.html", ref=ref[0])
 
+@app.route("/book/<id>")
+def view_book(id):
+    db=get_db()
+    cur = db.execute('select * from books where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    title=row[2],
+                    author=row[3],
+                    editor=row[4],
+                    publisher=row[5],
+                    year=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    address=row[10],
+                    edition=row[11],
+                    month=row[12],
+                    note=row[13]) for row in cur.fetchall()]
+    return render_template("view_book.html", ref=ref[0])
+    
+@app.route("/booklet/<id>")
+def view_booklet(id):
+    db=get_db()
+    cur = db.execute('select * from booklets where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    title=row[2],
+                    author=row[3],
+                    howpublished=row[4],
+                    address=row[5],
+                    month=row[6],
+                    year=row[7],
+                    note=row[8]) for row in cur.fetchall()]
+    return render_template("view_booklet.html", ref=ref[0])
+    
+@app.route("/conference/<id>")
+def view_conference(id):
+    db=get_db()
+    cur = db.execute('select * from conferences where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    booktitle=row[4],
+                    year=row[5],
+                    editor=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    pages=row[10],
+                    address=row[11],
+                    month=row[12],
+                    organization=row[13],
+                    publisher=row[14],
+                    note=row[15]) for row in cur.fetchall()]
+    return render_template("view_conference.html", ref=ref[0])
+
 @app.route("/refs")
 def list_refs():
     db=get_db()
@@ -88,7 +148,7 @@ def add_reference():
     #return render_template("add_reference.html", form=form)
     return render_template("add_reference.html")
 
-class ReferenceForm(Form):
+class ArticleForm(Form):
     bibtexkey = TextField("Name this reference for citing")
     author = TextField("Author")
     title = TextField("Title")
@@ -103,7 +163,7 @@ class ReferenceForm(Form):
 @app.route("/add/article", methods=["GET", "POST"])
 def add_article():
     db=get_db()
-    form = ReferenceForm(request.form)
+    form = ArticleForm(request.form)
     if request.method == "POST" and form.validate():
         db.execute("""INSERT INTO articles
         (bibtexkey, author, title, journal, year, volume, number, pages, month, note)
@@ -112,13 +172,133 @@ def add_article():
                    [form.bibtexkey.data,
                    form.author.data,
                    form.title.data,
-                   form.journal.data,
+                   form.editor.data,
+                   form.publisher.data,
                    form.year.data,
                    form.volume.data,
                    form.number.data,
-                   form.pages.data,
+                   form.series.data,
+                   form.address.data,
+                   form.edition.data,
                    form.month.data,
                    form.note.data])
         db.commit()
         return redirect("/refs")
     return render_template("add_article.html", form=form)
+    
+class BookForm(Form):
+    bibtexkey = TextField("Name this reference for citing")
+    author = TextField("Author")
+    title = TextField("Title")
+    editor = TextField("Editor")
+    publisher = TextField("Publisher")
+    year = IntegerField("Year")
+    volume = IntegerField("Volume")
+    number = IntegerField("Number")
+    series = TextField("Series")
+    address = TextField("Address")
+    edition = TextField("Edition")
+    month = IntegerField("Month")
+    note = TextField("Note")
+
+@app.route("/add/book", methods=["GET", "POST"])
+def add_book():
+    db=get_db()
+    form = BookForm(request.form)
+    if request.method == "POST" and form.validate():
+        db.execute("""INSERT INTO books
+        (bibtexkey, author, title, editor, publisher, year, volume, number, series, address, edition, month, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+                   [form.bibtexkey.data,
+                   form.author.data,
+                   form.title.data,
+                   form.editor.data,
+                   form.publisher.data,
+                   form.year.data,
+                   form.volume.data,
+                   form.number.data,
+                   form.series.data,
+                   form.address.data,
+                   form.edition.data,
+                   form.month.data,
+                   form.note.data])
+        db.commit()
+        return redirect("/refs")
+    return render_template("add_book.html", form=form)
+    
+class BookletForm(Form):
+    bibtexkey = TextField("Name this reference for citing")
+    author = TextField("Author")
+    title = TextField("Title")
+    howpublished = TextField("How published")
+    address = IntegerField("Address")
+    month = IntegerField("Month")
+    year = IntegerField("Year")
+    note = TextField("Note")
+
+@app.route("/add/booklet", methods=["GET", "POST"])
+def add_booklet():
+    db=get_db()
+    form = BookletForm(request.form)
+    if request.method == "POST" and form.validate():
+        db.execute("""INSERT INTO booklets
+        (bibtexkey, author, title, howpublished, address, month, year, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+                   [form.bibtexkey.data,
+                   form.author.data,
+                   form.title.data,
+                   form.howpublished.data,
+                   form.address.data,
+                   form.month.data,
+                   form.year.data,
+                   form.note.data])
+        db.commit()
+        return redirect("/refs")
+    return render_template("add_booklet.html", form=form)
+    
+class ConferenceForm(Form):
+    bibtexkey = TextField("Name this reference for citing")
+    author = TextField("Author")
+    title = TextField("Title")
+    booktitle = TextField("Book title")
+    year = IntegerField("Year")
+    editor = IntegerField("Editor")
+    volume = IntegerField("Volume")
+    number = IntegerField("Number")
+    series = IntegerField("Series")
+    pages = IntegerField("Pages")
+    address = IntegerField("Address")
+    month = IntegerField("Month")
+    organization = IntegerField("Organization")
+    publisher = IntegerField("Publisher")
+    note = TextField("Note")
+
+@app.route("/add/conference", methods=["GET", "POST"])
+def add_conference():
+    db=get_db()
+    form = ConferenceForm(request.form)
+    if request.method == "POST" and form.validate():
+        db.execute("""INSERT INTO conferences
+        (bibtexkey, author, title, booktitle, year, editor, volume, number, series, pages, address, month, organization, publisher, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+                   [form.bibtexkey.data,
+                   form.author.data,
+                   form.title.data,
+                   form.booktitle.data,
+                   form.year.data,
+                   form.editor.data,
+                   form.volume.data,
+                   form.number.data,
+                   form.series.data,
+                   form.pages.data,
+                   form.address.data,
+                   form.month.data,
+                   form.organization.data,
+                   form.publisher.data,
+                   form.note.data])
+        db.commit()
+        return redirect("/refs")
+    return render_template("add_conference.html", form=form)
