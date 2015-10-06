@@ -2,18 +2,23 @@
 import sys
 
 from tests import HauskaTestCase
-from hauska.views import handle_special_characters_in_bibtex_value
+import hauska
 
 class ViewTestCase(HauskaTestCase):
     def testIndexIs200(self):
         rv = self.app.get("/")
         self.assertEquals(rv.status_code, 200)
 
-    # def testNoRefs(self):
-    #     with self.app.app_context():
-    #         rv = self.app.get("/refs")
-    #         assert 'No refs yet' in rv.data
-    def test_handleing_special_characters_correctly(self):
-        a="Åkerlöndä Ö. Äkå"
-        handled=handle_special_characters_in_bibtex_value(a)
-        self.assertEqual(handled,'{\\AA}kerl{\\\"o}nd{\\\"a} {\\\"O}. {\\\"A}k{\\aa}')
+    def testNoRefs(self):
+        rv = self.app.get("/refs")
+        assert 'No entries yet' in rv.data
+
+    def testRefs(self):
+        db = hauska.get_db()
+        db.execute("""INSERT INTO articles
+        (bibtexkey, author, title, journal, year, volume, number, pages, month, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+                   ["123"]*10)
+        rv = self.app.get("/refs")
+        assert 'No entries yet' not in rv.data
