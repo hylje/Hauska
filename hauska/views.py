@@ -172,14 +172,11 @@ def add_article():
                    [form.bibtexkey.data,
                    form.author.data,
                    form.title.data,
-                   form.editor.data,
-                   form.publisher.data,
+                   form.journal.data,
                    form.year.data,
                    form.volume.data,
                    form.number.data,
-                   form.series.data,
-                   form.address.data,
-                   form.edition.data,
+                   form.pages.data,
                    form.month.data,
                    form.note.data])
         db.commit()
