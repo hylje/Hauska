@@ -475,7 +475,7 @@ def view_conference_bib(id):
 
 @app.route("/refs/bib")
 def list_refs_bib():
-    bibtex_compilation = "<ul>";
+    bibtex_compilation = "<ul>"
     db=get_db()
     cur = db.execute('select * from articles ORDER BY id asc')
     articles = [dict(id=row[0],
@@ -592,5 +592,6 @@ def list_refs_bib():
     unpublished = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in unpublished:
         #bibtex_compilation += unpublished_to_bib(ref) TODO
-    #print refs
+        
+    bibtex_compilation += "</ul>"
     return bibtex_compilation
