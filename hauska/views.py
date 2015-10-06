@@ -299,3 +299,14 @@ def add_conference():
         db.commit()
         return redirect("/refs")
     return render_template("add_conference.html", form=form)
+
+def handle_special_characters_in_bibtex_value(value):
+    conversion={'ä':'{\\\"a}',
+                'Ä':'{\\\"A}',
+                'ö':'{\\\"o}',
+                'Ö':'{\\\"O}',
+                'å':'{\\aa}',
+                'Å':'{\\AA}'}
+    for c in conversion:
+        value=value.replace(c,conversion[c])
+    return value
