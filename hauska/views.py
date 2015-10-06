@@ -133,8 +133,8 @@ def list_refs():
     #print refs
     return render_template("refs.html",articles=articles,books=books,booklets=booklets,conferences=conferences,inbooks=inbooks,incollections=incollections,inproceedings=inproceedings,manuals=manuals,masterstheses=masterstheses,miscs=miscs,phdtheses=phdtheses,proceedings=proceedings,techreports=techreports,unpublished=unpublished)
 
-class ArticleForm(Form):
-    bibtexkey = TextField("Anna viitteelle nimi:")
+#class ArticleForm(Form):
+#    bibtexkey = TextField("Anna viitteelle nimi:")
 
 @app.route("/add")
 def add_reference():
@@ -299,3 +299,298 @@ def add_conference():
         db.commit()
         return redirect("/refs")
     return render_template("add_conference.html", form=form)
+
+def article_to_bib(ref):
+    bibstring = "@article{"  + ref['bibtexkey'] + ",\n"
+    bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    bibstring += "\t"+"journal = \"" + ref['journal'] + "\",\n"
+    bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
+    if ref['volume']:
+        bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
+    if ref['number']:
+        bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
+    if ref['pages']:
+        bibstring += "\t"+"pages = \"" + ref['pages'] + "\",\n"
+    if ref['month']:
+        bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
+    if ref['note']:
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
+    bibstring += "}\n"
+    return bibstring
+    
+@app.route("/article/<id>/bib")
+def view_article_bib(id):
+    db=get_db()
+    cur = db.execute('select * from articles where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    journal=row[4],
+                    year=row[5],
+                    volume=row[6],
+                    number=row[7],
+                    pages=row[8],
+                    month=row[9],
+                    note=row[10]) for row in cur.fetchall()]
+    return article_to_bib(ref[0])
+
+def book_to_bib(ref):
+    bibstring = "@book{"  + ref['bibtexkey'] + ",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    if ref['author']:
+        bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    if ref['editor']:
+        bibstring += "\t"+"editor = \"" + ref['editor'] + "\",\n"
+    if not ref['author']:
+        if not ref['editor']:
+            bibstring += "\t"+"author = \"missing author or editor\",\n"
+    bibstring += "\t"+"publisher = \"" + ref['publisher'] + "\",\n"
+    bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
+    if ref['volume']:
+        bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
+    if ref['number']:
+        bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
+    if ref['series']:
+        bibstring += "\t"+"series = \"" + ref['series'] + "\",\n"
+    if ref['address']:
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
+    if ref['edition']:
+        bibstring += "\t"+"edition = \"" + ref['edition'] + "\",\n"
+    if ref['month']:
+        bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
+    if ref['note']:
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
+    bibstring += "}\n"
+    return bibstring
+
+@app.route("/book/<id>/bib")
+def view_book_bib(id):
+    db=get_db()
+    cur = db.execute('select * from books where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    title=row[2],
+                    author=row[3],
+                    editor=row[4],
+                    publisher=row[5],
+                    year=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    address=row[10],
+                    edition=row[11],
+                    month=row[12],
+                    note=row[13]) for row in cur.fetchall()]
+    return book_to_bib(ref[0])
+    
+def booklet_to_bib(ref):
+    bibstring = "@booklet{"  + ref['bibtexkey'] + ",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    if ref['author']:
+        bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    if ref['howpublished']:
+        bibstring += "\t"+"howpublished = \"" + ref['howpublished'] + "\",\n"
+    if ref['address']:
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
+    if ref['month']:
+        bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
+    if ref['year']:
+        bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
+    if ref['note']:
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
+    bibstring += "}\n"
+    return bibstring
+    
+@app.route("/booklet/<id>/bib")
+def view_booklet_bib(id):
+    db=get_db()
+    cur = db.execute('select * from booklets where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    title=row[2],
+                    author=row[3],
+                    howpublished=row[4],
+                    address=row[5],
+                    month=row[6],
+                    year=row[7],
+                    note=row[8]) for row in cur.fetchall()]
+    return booklet_to_bib(ref[0])
+    
+def conference_to_bib(ref):
+    bibstring = "@conference{"  + ref['bibtexkey'] + ",\n"
+    bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    bibstring += "\t"+"booktitle = \"" + ref['booktitle'] + "\",\n"
+    bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
+    if ref['editor']:
+        bibstring += "\t"+"editor = \"" + ref['editor'] + "\",\n"
+    if ref['volume']:
+        bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
+    if ref['number']:
+        bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
+    if ref['series']:
+        bibstring += "\t"+"series = \"" + ref['series'] + "\",\n"
+    if ref['pages']:
+        bibstring += "\t"+"pages = \"" + ref['pages'] + "\",\n"
+    if ref['address']:
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
+    if ref['month']:
+        bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
+    if ref['organization']:
+        bibstring += "\t"+"organization = \"" + ref['organization'] + "\",\n"
+    if ref['publisher']:
+        bibstring += "\t"+"publisher = \"" + ref['publisher'] + "\",\n"
+    if ref['note']:
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
+    bibstring += "}\n"
+    return bibstring
+    
+@app.route("/conference/<id>/bib")
+def view_conference_bib(id):
+    db=get_db()
+    cur = db.execute('select * from conferences where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    booktitle=row[4],
+                    year=row[5],
+                    editor=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    pages=row[10],
+                    address=row[11],
+                    month=row[12],
+                    organization=row[13],
+                    publisher=row[14],
+                    note=row[15]) for row in cur.fetchall()]
+    return conference_to_bib(ref[0])
+
+@app.route("/refs/bib")
+def list_refs_bib():
+    bibtex_compilation = "<ul>";
+    db=get_db()
+    cur = db.execute('select * from articles ORDER BY id asc')
+    articles = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    journal=row[4],
+                    year=row[5],
+                    volume=row[6],
+                    number=row[7],
+                    pages=row[8],
+                    month=row[9],
+                    note=row[10]) for row in cur.fetchall()]
+    for ref in articles:
+        bibtex_compilation += "<li>" + article_to_bib(ref) + "</li>"
+    
+    cur = db.execute('select * from books ORDER BY id asc')
+    books = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    title=row[2],
+                    author=row[3],
+                    editor=row[4],
+                    publisher=row[5],
+                    year=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    address=row[10],
+                    edition=row[11],
+                    month=row[12],
+                    note=row[13]) for row in cur.fetchall()]
+    for ref in books:
+        bibtex_compilation += "<li>" + book_to_bib(ref) + "</li>"
+    
+    cur = db.execute('select * from booklets ORDER BY id asc')
+    booklets = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    title=row[2],
+                    author=row[3],
+                    howpublished=row[4],
+                    address=row[5],
+                    month=row[6],
+                    year=row[7],
+                    note=row[8]) for row in cur.fetchall()]
+    for ref in booklets:
+        bibtex_compilation += "<li>" + booklet_to_bib(ref) + "</li>"
+    
+    cur = db.execute('select * from conferences ORDER BY id asc')
+    conferences = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    booktitle=row[4],
+                    year=row[5],
+                    editor=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    pages=row[10],
+                    address=row[11],
+                    month=row[12],
+                    organization=row[13],
+                    publisher=row[14],
+                    note=row[15]) for row in cur.fetchall()]
+    for ref in conferences:
+        bibtex_compilation += "<li>" + conference_to_bib(ref) + "</li>"
+    
+    cur = db.execute('select * from inbooks ORDER BY id asc')
+    inbooks = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in inbooks:
+        #bibtex_compilation += inbook_to_bib(ref) TODO
+    
+    cur = db.execute('select * from incollections ORDER BY id asc')
+    incollections = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in incollections:
+        #bibtex_compilation += incollection_to_bib(ref) TODO
+    
+    cur = db.execute('select * from inproceedings ORDER BY id asc')
+    inproceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in inproceedings:
+        #bibtex_compilation += inproceeding_to_bib(ref) TODO
+    
+    cur = db.execute('select * from manuals ORDER BY id asc')
+    manuals = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in manuals:
+        #bibtex_compilation += manual_to_bib(ref) TODO
+    
+    cur = db.execute('select * from masterstheses ORDER BY id asc')
+    masterstheses = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in masterstheses:
+        #bibtex_compilation += mastersthesis_to_bib(ref) TODO
+    
+    cur = db.execute('select * from miscs ORDER BY id asc')
+    miscs = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in miscs:
+        #bibtex_compilation += misc_to_bib(ref) TODO
+    
+    cur = db.execute('select * from phdtheses ORDER BY id asc')
+    phdtheses = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in phdtheses:
+        #bibtex_compilation += phdthesis_to_bib(ref) TODO
+    
+    cur = db.execute('select * from proceedings ORDER BY id asc')
+    proceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in proceedings:
+        #bibtex_compilation += proceeding_to_bib(ref) TODO
+    
+    cur = db.execute('select * from techreports ORDER BY id asc')
+    techreports = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in techreports:
+        #bibtex_compilation += techreport_to_bib(ref) TODO
+    
+    cur = db.execute('select * from unpublished ORDER BY id asc')
+    unpublished = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
+    #for ref in unpublished:
+        #bibtex_compilation += unpublished_to_bib(ref) TODO
+    #print refs
+    return bibtex_compilation
