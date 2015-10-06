@@ -10,17 +10,6 @@ app.config.from_object("hauska.default_settings")
 app.config.from_envvar('HAUSKA_SETTINGS', silent=True)
 
 # Tietokantatyökalut
-_db = None
-
-
-def db_connection():
-    global _db
-
-    if _db is None:
-        _db = sqlite3.connect(app.config["DATABASE"])
-
-    return _db
-
 
 def connect_db():
     """Connects to the specific database."""
