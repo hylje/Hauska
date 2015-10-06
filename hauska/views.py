@@ -156,8 +156,8 @@ def list_refs():
                            unpublished=unpublished,
                            no_entries=no_entries)
 
-class ArticleForm(Form):
-    bibtexkey = TextField("Anna viitteelle nimi:")
+#class ArticleForm(Form):
+#    bibtexkey = TextField("Anna viitteelle nimi:")
 
 @app.route("/add")
 def add_reference():
@@ -535,7 +535,6 @@ def list_refs_bib():
                     edition=row[11],
                     month=row[12],
                     note=row[13]) for row in cur.fetchall()]
-
     bibtex_compilation.extend(book_to_bib(ref) for ref in books)
 
     cur = db.execute('select * from booklets ORDER BY id asc')
