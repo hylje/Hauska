@@ -7,7 +7,7 @@ from wtforms import Form, IntegerField, TextField
 @app.route("/")
 def hello():
     return render_template("index.html")
-    
+
 @app.route("/article/<id>")
 def view_article(id):
     db=get_db()
@@ -46,7 +46,7 @@ def view_book(id):
                     month=row[12],
                     note=row[13]) for row in cur.fetchall()]
     return render_template("view_book.html", ref=ref[0])
-    
+
 @app.route("/booklet/<id>")
 def view_booklet(id):
     db=get_db()
@@ -62,7 +62,7 @@ def view_booklet(id):
                     year=row[7],
                     note=row[8]) for row in cur.fetchall()]
     return render_template("view_booklet.html", ref=ref[0])
-    
+
 @app.route("/conference/<id>")
 def view_conference(id):
     db=get_db()
@@ -91,43 +91,43 @@ def list_refs():
     db=get_db()
     cur = db.execute('select id, bibtexkey from articles ORDER BY id asc')
     articles = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from books ORDER BY id asc')
     books = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from booklets ORDER BY id asc')
     booklets = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from conferences ORDER BY id asc')
     conferences = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from inbooks ORDER BY id asc')
     inbooks = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from incollections ORDER BY id asc')
     incollections = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from inproceedings ORDER BY id asc')
     inproceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from manuals ORDER BY id asc')
     manuals = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from masterstheses ORDER BY id asc')
     masterstheses = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from miscs ORDER BY id asc')
     miscs = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from phdtheses ORDER BY id asc')
     phdtheses = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from proceedings ORDER BY id asc')
     proceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from techreports ORDER BY id asc')
     techreports = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    
+
     cur = db.execute('select id, bibtexkey from unpublished ORDER BY id asc')
     unpublished = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #print refs
@@ -182,7 +182,7 @@ def add_article():
         db.commit()
         return redirect("/refs")
     return render_template("add_article.html", form=form)
-    
+
 class BookForm(Form):
     bibtexkey = TextField("Name this reference for citing")
     author = TextField("Author")
@@ -223,7 +223,7 @@ def add_book():
         db.commit()
         return redirect("/refs")
     return render_template("add_book.html", form=form)
-    
+
 class BookletForm(Form):
     bibtexkey = TextField("Name this reference for citing")
     author = TextField("Author")
@@ -254,7 +254,7 @@ def add_booklet():
         db.commit()
         return redirect("/refs")
     return render_template("add_booklet.html", form=form)
-    
+
 class ConferenceForm(Form):
     bibtexkey = TextField("Name this reference for citing")
     author = TextField("Author")
@@ -318,7 +318,7 @@ def article_to_bib(ref):
         bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
-    
+
 @app.route("/article/<id>/bib")
 def view_article_bib(id):
     db=get_db()
@@ -386,7 +386,7 @@ def view_book_bib(id):
                     month=row[12],
                     note=row[13]) for row in cur.fetchall()]
     return book_to_bib(ref[0])
-    
+
 def booklet_to_bib(ref):
     bibstring = "@booklet{"  + ref['bibtexkey'] + ",\n"
     bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
@@ -404,7 +404,7 @@ def booklet_to_bib(ref):
         bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
-    
+
 @app.route("/booklet/<id>/bib")
 def view_booklet_bib(id):
     db=get_db()
@@ -420,7 +420,7 @@ def view_booklet_bib(id):
                     year=row[7],
                     note=row[8]) for row in cur.fetchall()]
     return booklet_to_bib(ref[0])
-    
+
 def conference_to_bib(ref):
     bibstring = "@conference{"  + ref['bibtexkey'] + ",\n"
     bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
@@ -449,7 +449,7 @@ def conference_to_bib(ref):
         bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
-    
+
 @app.route("/conference/<id>/bib")
 def view_conference_bib(id):
     db=get_db()
@@ -491,7 +491,7 @@ def list_refs_bib():
                     note=row[10]) for row in cur.fetchall()]
     for ref in articles:
         bibtex_compilation += "<li>" + article_to_bib(ref) + "</li>"
-    
+
     cur = db.execute('select * from books ORDER BY id asc')
     books = [dict(id=row[0],
                     bibtexkey=row[1],
@@ -509,7 +509,7 @@ def list_refs_bib():
                     note=row[13]) for row in cur.fetchall()]
     for ref in books:
         bibtex_compilation += "<li>" + book_to_bib(ref) + "</li>"
-    
+
     cur = db.execute('select * from booklets ORDER BY id asc')
     booklets = [dict(id=row[0],
                     bibtexkey=row[1],
@@ -522,7 +522,7 @@ def list_refs_bib():
                     note=row[8]) for row in cur.fetchall()]
     for ref in booklets:
         bibtex_compilation += "<li>" + booklet_to_bib(ref) + "</li>"
-    
+
     cur = db.execute('select * from conferences ORDER BY id asc')
     conferences = [dict(id=row[0],
                     bibtexkey=row[1],
@@ -542,56 +542,67 @@ def list_refs_bib():
                     note=row[15]) for row in cur.fetchall()]
     for ref in conferences:
         bibtex_compilation += "<li>" + conference_to_bib(ref) + "</li>"
-    
+
     cur = db.execute('select * from inbooks ORDER BY id asc')
     inbooks = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in inbooks:
         #bibtex_compilation += inbook_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from incollections ORDER BY id asc')
     incollections = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in incollections:
         #bibtex_compilation += incollection_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from inproceedings ORDER BY id asc')
     inproceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in inproceedings:
         #bibtex_compilation += inproceeding_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from manuals ORDER BY id asc')
     manuals = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in manuals:
         #bibtex_compilation += manual_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from masterstheses ORDER BY id asc')
     masterstheses = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in masterstheses:
         #bibtex_compilation += mastersthesis_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from miscs ORDER BY id asc')
     miscs = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in miscs:
         #bibtex_compilation += misc_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from phdtheses ORDER BY id asc')
     phdtheses = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in phdtheses:
         #bibtex_compilation += phdthesis_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from proceedings ORDER BY id asc')
     proceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in proceedings:
         #bibtex_compilation += proceeding_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from techreports ORDER BY id asc')
     techreports = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in techreports:
         #bibtex_compilation += techreport_to_bib(ref) TODO
-    
+
     cur = db.execute('select * from unpublished ORDER BY id asc')
     unpublished = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
     #for ref in unpublished:
         #bibtex_compilation += unpublished_to_bib(ref) TODO
-        
+
     bibtex_compilation += "</ul>"
     return bibtex_compilation
+
+def handle_special_characters_in_bibtex_value(value):
+    conversion={'ä':'{\\\"a}',
+                'Ä':'{\\\"A}',
+                'ö':'{\\\"o}',
+                'Ö':'{\\\"O}',
+                'å':'{\\aa}',
+                'Å':'{\\AA}'}
+    for c in conversion:
+        value=value.replace(c,conversion[c])
+    return value
