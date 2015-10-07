@@ -62,7 +62,7 @@
 <p>Inproceedings</p>
 <ul>
 {% for ref in inproceedings %}
-    <li><a>id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
+    <li><a href="/inproceedings/{{ ref.id }}">id: {{ ref.id }}, bibtex key: {{ ref.bibtexkey }}</a></li>
 {% endfor %}
 </ul>
 {% endif %}

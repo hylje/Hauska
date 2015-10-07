@@ -88,6 +88,29 @@ def view_conference(id):
                     note=row[15]) for row in cur.fetchall()]
     return render_template("view_conference.html", ref=ref[0])
 
+@app.route("/inproceedings/<id>")
+def view_inproceedings(id):
+    db=get_db()
+    cur = db.execute('select * from inproceedings where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    booktitle=row[4],
+                    year=row[5],
+                    editor=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    pages=row[10],
+                    address=row[11],
+                    month=row[12],
+                    organization=row[13],
+                    publisher=row[14],
+                    note=row[15]) for row in cur.fetchall()]
+    return render_template("view_inproceedings.html", ref=ref[0])
+
 @app.route("/refs")
 def list_refs():
     db=get_db()
@@ -261,11 +284,19 @@ def add_book():
     return render_template("add_book.html", form=form)
 
 class BookletForm(Form):
+<<<<<<< HEAD
     bibtexkey = StringField("Name this reference for citing")
     author = StringField("Author")
     title = StringField("Title")
     howpublished = StringField("How published")
     address = IntegerField("Address")
+=======
+    bibtexkey = TextField("Name this reference for citing")
+    author = TextField("Author")
+    title = TextField("Title")
+    howpublished = TextField("How published")
+    address = TextField("Address")
+>>>>>>> 6a1bf6bfed0717ba911effef039753c3ec4b6881
     month = IntegerField("Month")
     year = IntegerField("Year")
     note = StringField("Note")
@@ -297,6 +328,7 @@ class ConferenceForm(Form):
     title = StringField("Title")
     booktitle = StringField("Book title")
     year = IntegerField("Year")
+<<<<<<< HEAD
     editor = StringField("Editor")
     volume = IntegerField("Volume")
     number = IntegerField("Number")
@@ -307,6 +339,18 @@ class ConferenceForm(Form):
     organization = StringField("Organization")
     publisher = StringField("Publisher")
     note = StringField("Note")
+=======
+    editor = TextField("Editor")
+    volume = IntegerField("Volume")
+    number = IntegerField("Number")
+    series = TextField("Series")
+    pages = TextField("Pages")
+    address = TextField("Address")
+    month = IntegerField("Month")
+    organization = TextField("Organization")
+    publisher = TextField("Publisher")
+    note = TextField("Note")
+>>>>>>> 6a1bf6bfed0717ba911effef039753c3ec4b6881
 
 @app.route("/add/conference", methods=["GET", "POST"])
 def add_conference():
@@ -335,6 +379,34 @@ def add_conference():
         db.commit()
         return redirect("/refs")
     return render_template("add_conference.html", form=form)
+
+@app.route("/add/inproceedings", methods=["GET", "POST"])
+def add_inproceedings():
+    db=get_db()
+    form = ConferenceForm(request.form)
+    if request.method == "POST" and form.validate():
+        db.execute("""INSERT INTO inproceedings
+        (bibtexkey, author, title, booktitle, year, editor, volume, number, series, pages, address, month, organization, publisher, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+                   [form.bibtexkey.data,
+                   form.author.data,
+                   form.title.data,
+                   form.booktitle.data,
+                   form.year.data,
+                   form.editor.data,
+                   form.volume.data,
+                   form.number.data,
+                   form.series.data,
+                   form.pages.data,
+                   form.address.data,
+                   form.month.data,
+                   form.organization.data,
+                   form.publisher.data,
+                   form.note.data])
+        db.commit()
+        return redirect("/refs")
+    return render_template("add_inproceedings.html", form=form)
 
 def article_to_bib(ref):
     bibstring = "@article{"  + ref['bibtexkey'] + ",\n"
@@ -513,6 +585,59 @@ def view_conference_bib(id):
                     note=row[15]) for row in cur.fetchall()]
     return conference_to_bib(ref[0])
 
+def inproceedings_to_bib(ref):
+    bibstring = "@inproceedings{"  + ref['bibtexkey'] + ",\n"
+    bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    bibstring += "\t"+"booktitle = \"" + ref['booktitle'] + "\",\n"
+    bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
+    if ref['editor']:
+        bibstring += "\t"+"editor = \"" + ref['editor'] + "\",\n"
+    if ref['volume']:
+        bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
+    if ref['number']:
+        bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
+    if ref['series']:
+        bibstring += "\t"+"series = \"" + ref['series'] + "\",\n"
+    if ref['pages']:
+        bibstring += "\t"+"pages = \"" + ref['pages'] + "\",\n"
+    if ref['address']:
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
+    if ref['month']:
+        bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
+    if ref['organization']:
+        bibstring += "\t"+"organization = \"" + ref['organization'] + "\",\n"
+    if ref['publisher']:
+        bibstring += "\t"+"publisher = \"" + ref['publisher'] + "\",\n"
+    if ref['note']:
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
+    bibstring += "}\n"
+    return bibstring
+
+@app.route("/inproceedings/<id>/bib")
+@plaintext_response
+def view_inproceedings_bib(id):
+    db=get_db()
+    cur = db.execute('select * from inproceedings where id = ?',
+                    [id])
+    ref = [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    booktitle=row[4],
+                    year=row[5],
+                    editor=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    pages=row[10],
+                    address=row[11],
+                    month=row[12],
+                    organization=row[13],
+                    publisher=row[14],
+                    note=row[15]) for row in cur.fetchall()]
+    return inproceedings_to_bib(ref[0])
+
 @app.route("/refs/bib")
 @plaintext_response
 def list_refs_bib():
@@ -593,8 +718,24 @@ def list_refs_bib():
     #bibtex_compilation.extend(incollection_to_bib(ref) for ref in incollections)
 
     cur = db.execute('select * from inproceedings ORDER BY id asc')
-    inproceedings = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
-    #bibtex_compilation.extend(inproceeding_to_bib(ref) for ref in inproceedings)
+    inproceedings =  [dict(id=row[0],
+                    bibtexkey=row[1],
+                    author=row[2],
+                    title=row[3],
+                    booktitle=row[4],
+                    year=row[5],
+                    editor=row[6],
+                    volume=row[7],
+                    number=row[8],
+                    series=row[9],
+                    pages=row[10],
+                    address=row[11],
+                    month=row[12],
+                    organization=row[13],
+                    publisher=row[14],
+                    note=row[15]) for row in cur.fetchall()]
+                    
+    bibtex_compilation.extend(inproceedings_to_bib(ref) for ref in inproceedings)
 
     cur = db.execute('select * from manuals ORDER BY id asc')
     manuals = [dict(id=row[0], bibtexkey=row[1]) for row in cur.fetchall()]
