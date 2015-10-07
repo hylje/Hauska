@@ -325,20 +325,20 @@ def add_conference():
 
 def article_to_bib(ref):
     bibstring = "@article{"  + ref['bibtexkey'] + ",\n"
-    bibstring += "\t"+"author = \"" + handle_special_characters_in_bibtex_value(ref['author']) + "\",\n"
-    bibstring += "\t"+"title = \"" + handle_special_characters_in_bibtex_value(ref['title']) + "\",\n"
-    bibstring += "\t"+"journal = \"" + handle_special_characters_in_bibtex_value(ref['journal']) + "\",\n"
+    bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    bibstring += "\t"+"journal = \"" + ref['journal'] + "\",\n"
     bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
     if ref['volume']:
         bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
     if ref['number']:
         bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
     if ref['pages']:
-        bibstring += "\t"+"pages = \"" + handle_special_characters_in_bibtex_value(ref['pages']) + "\",\n"
+        bibstring += "\t"+"pages = \"" + ref['pages'] + "\",\n"
     if ref['month']:
         bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
     if ref['note']:
-        bibstring += "\t"+"note = \"" + handle_special_characters_in_bibtex_value(ref['note']) + "\",\n"
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
 
@@ -363,30 +363,30 @@ def view_article_bib(id):
 
 def book_to_bib(ref):
     bibstring = "@book{"  + ref['bibtexkey'] + ",\n"
-    bibstring += "\t"+"title = \"" + handle_special_characters_in_bibtex_value(ref['title']) + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
     if ref['author']:
-        bibstring += "\t"+"author = \"" + handle_special_characters_in_bibtex_value(ref['author']) + "\",\n"
+        bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
     if ref['editor']:
-        bibstring += "\t"+"editor = \"" + handle_special_characters_in_bibtex_value(ref['editor']) + "\",\n"
+        bibstring += "\t"+"editor = \"" + ref['editor'] + "\",\n"
     if not ref['author']:
         if not ref['editor']:
             bibstring += "\t"+"author = \"missing author or editor\",\n"
-    bibstring += "\t"+"publisher = \"" + handle_special_characters_in_bibtex_value(ref['publisher']) + "\",\n"
+    bibstring += "\t"+"publisher = \"" + ref['publisher'] + "\",\n"
     bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
     if ref['volume']:
         bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
     if ref['number']:
         bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
     if ref['series']:
-        bibstring += "\t"+"series = \"" + handle_special_characters_in_bibtex_value(ref['series']) + "\",\n"
+        bibstring += "\t"+"series = \"" + ref['series'] + "\",\n"
     if ref['address']:
-        bibstring += "\t"+"address = \"" + handle_special_characters_in_bibtex_value(ref['address']) + "\",\n"
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
     if ref['edition']:
-        bibstring += "\t"+"edition = \"" + handle_special_characters_in_bibtex_value(ref['edition']) + "\",\n"
+        bibstring += "\t"+"edition = \"" + ref['edition'] + "\",\n"
     if ref['month']:
         bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
     if ref['note']:
-        bibstring += "\t"+"note = \"" + handle_special_characters_in_bibtex_value(ref['note']) + "\",\n"
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
 
@@ -414,19 +414,19 @@ def view_book_bib(id):
 
 def booklet_to_bib(ref):
     bibstring = "@booklet{"  + ref['bibtexkey'] + ",\n"
-    bibstring += "\t"+"title = \"" + handle_special_characters_in_bibtex_value(ref['title']) + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
     if ref['author']:
-        bibstring += "\t"+"author = \"" + handle_special_characters_in_bibtex_value(ref['author']) + "\",\n"
+        bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
     if ref['howpublished']:
-        bibstring += "\t"+"howpublished = \"" + handle_special_characters_in_bibtex_value(ref['howpublished']) + "\",\n"
+        bibstring += "\t"+"howpublished = \"" + ref['howpublished'] + "\",\n"
     if ref['address']:
-        bibstring += "\t"+"address = \"" + handle_special_characters_in_bibtex_value(ref['address']) + "\",\n"
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
     if ref['month']:
         bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
     if ref['year']:
         bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
     if ref['note']:
-        bibstring += "\t"+"note = \"" + handle_special_characters_in_bibtex_value(ref['note']) + "\",\n"
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
 
@@ -449,30 +449,30 @@ def view_booklet_bib(id):
 
 def conference_to_bib(ref):
     bibstring = "@conference{"  + ref['bibtexkey'] + ",\n"
-    bibstring += "\t"+"author = \"" + handle_special_characters_in_bibtex_value(ref['author']) + "\",\n"
-    bibstring += "\t"+"title = \"" + handle_special_characters_in_bibtex_value(ref['title']) + "\",\n"
-    bibstring += "\t"+"booktitle = \"" + handle_special_characters_in_bibtex_value(ref['booktitle']) + "\",\n"
+    bibstring += "\t"+"author = \"" + ref['author'] + "\",\n"
+    bibstring += "\t"+"title = \"" + ref['title'] + "\",\n"
+    bibstring += "\t"+"booktitle = \"" + ref['booktitle'] + "\",\n"
     bibstring += "\t"+"year = \"" + str(ref['year']) + "\",\n"
     if ref['editor']:
-        bibstring += "\t"+"editor = \"" + handle_special_characters_in_bibtex_value(ref['editor']) + "\",\n"
+        bibstring += "\t"+"editor = \"" + ref['editor'] + "\",\n"
     if ref['volume']:
         bibstring += "\t"+"volume = \"" + str(ref['volume']) + "\",\n"
     if ref['number']:
         bibstring += "\t"+"number = \"" + str(ref['number']) + "\",\n"
     if ref['series']:
-        bibstring += "\t"+"series = \"" + handle_special_characters_in_bibtex_value(ref['series']) + "\",\n"
+        bibstring += "\t"+"series = \"" + ref['series'] + "\",\n"
     if ref['pages']:
-        bibstring += "\t"+"pages = \"" + handle_special_characters_in_bibtex_value(ref['pages']) + "\",\n"
+        bibstring += "\t"+"pages = \"" + ref['pages'] + "\",\n"
     if ref['address']:
-        bibstring += "\t"+"address = \"" + handle_special_characters_in_bibtex_value(ref['address']) + "\",\n"
+        bibstring += "\t"+"address = \"" + ref['address'] + "\",\n"
     if ref['month']:
         bibstring += "\t"+"month = \"" + str(ref['month']) + "\",\n"
     if ref['organization']:
-        bibstring += "\t"+"organization = \"" + handle_special_characters_in_bibtex_value(ref['organization']) + "\",\n"
+        bibstring += "\t"+"organization = \"" + ref['organization'] + "\",\n"
     if ref['publisher']:
-        bibstring += "\t"+"publisher = \"" + handle_special_characters_in_bibtex_value(ref['publisher']) + "\",\n"
+        bibstring += "\t"+"publisher = \"" + ref['publisher'] + "\",\n"
     if ref['note']:
-        bibstring += "\t"+"note = \"" + handle_special_characters_in_bibtex_value(ref['note']) + "\",\n"
+        bibstring += "\t"+"note = \"" + ref['note'] + "\",\n"
     bibstring += "}\n"
     return bibstring
 
