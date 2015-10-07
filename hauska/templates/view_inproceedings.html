@@ -1,0 +1,28 @@
+<!doctype html>
+
+{% if ref %}
+<h1>Inproceedings {{ ref.bibtexkey }}</h1>
+
+<a href="/refs">Back</a>
+<p><a href="/inproceedings/{{ ref.id }}/bib">Show in BibTeX format</a></p>
+
+<ul>
+    <li>author = {{ ref.author }}</li>
+    <li>title = {{ ref.title }}</li>
+    <li>booktitle = {{ ref.booktitle }}</li>
+    <li>year = {{ ref.year }}</li>
+    <li>editor = {{ ref.editor }}</li>
+    <li>volume = {{ ref.volume }}</li>
+    <li>number = {{ ref.number }}</li>
+    <li>series = {{ ref.series }}</li>
+    <li>pages = {{ ref.pages }}</li>
+    <li>address = {{ ref.address }}</li>
+    <li>month = {{ ref.month }}</li>
+    <li>organization = {{ ref.organization }}</li>
+    <li>publisher = {{ ref.publisher }}</li>
+    <li>note = {{ ref.note }}</li>
+</ul>
+
+{% else %}
+<h1>Article does not exist for some reason. Sorry about that.</h1>
+{% endif %}
