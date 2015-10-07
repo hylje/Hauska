@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS articles (
     title text not null,
     journal text not null,
     year int not null,
-    volume int,
+    volume int not null,
     number int,
     pages text,
     month int,
