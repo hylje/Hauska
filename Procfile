@@ -1,0 +1,1 @@
+web: gunicorn hauska:app --log-file=-
