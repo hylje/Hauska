@@ -1,5 +1,5 @@
 import functools
-from hauska import app
+from hauska import app, get_db
 
 def plaintext_response(f):
     """Annotates view f with a plain-text header"""
@@ -11,3 +11,16 @@ def plaintext_response(f):
             [("Content-Type", "text/plain")]
         ))
     return wrapper
+
+def bibtexkey_exists(bibtexkey):
+    db = get_db()
+    for table in ['articles', 'books', 'booklets', 'conferences',
+                  'inbooks', 'incollections', 'inproceedings',
+                  'manuals', 'masterstheses', 'miscs', 'phdtheses',
+                  'proceedings', 'techreports', 'unpublished',]:
+        cur = db.execute("SELECT count(id) FROM %s WHERE bibtexkey=?" % table,
+                         [bibtexkey])
+        count, = cur.fetchone()
+        if count > 0:
+            return True
+    return False

@@ -25,6 +25,31 @@ class AddMixin(object):
                              data=dummy_data,
                              follow_redirects=True)
 
+    def _postBook(self, update_data=None):
+        dummy_data = {
+            "bibtexkey": "2",
+            "author": "123",
+            "title": "123",
+            "editor": "123",
+            "publisher": "123",
+            "year": "123",
+            "volume": "123",
+            "number": "123",
+            "series": "123",
+            "address": "123",
+            "edition": "123",
+            "month": "123",
+            "note": "123",
+        }
+
+        if update_data:
+            dummy_data.update(update_data)
+
+        return self.app.post("/add/book",
+                             data=dummy_data,
+                             follow_redirects=True)
+
+
 class AddTestCase(HauskaTestCase, AddMixin):
     def testAddingArticleActuallyAdds(self):
         db = hauska.get_db()
@@ -45,21 +70,7 @@ class AddTestCase(HauskaTestCase, AddMixin):
         cur = db.execute("SELECT count(1) FROM books")
         self.assertEqual(cur.fetchone()[0], 0)
 
-        rv = self.app.post("/add/book", data={
-            "bibtexkey": "2",
-            "author": "123",
-            "title": "123",
-            "editor": "123",
-            "publisher": "123",
-            "year": "123",
-            "volume": "123",
-            "number": "123",
-            "series": "123",
-            "address": "123",
-            "edition": "123",
-            "month": "123",
-            "note": "123",
-        }, follow_redirects=True)
+        rv = self._postBook()
 
         cur = db.execute("SELECT count(1) FROM books")
         self.assertEqual(cur.fetchone()[0], 1)
