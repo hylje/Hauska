@@ -1,10 +1,12 @@
 # -*- encoding: utf-8 -*-
 
 
+from flask import render_template, request, redirect
+
+
 from hauska import app, get_db
 from hauska.utils import plaintext_response
-from flask import render_template, request, redirect
-from wtforms import Form, IntegerField, StringField, validators
+from hauska import forms
 
 
 @app.route("/")
@@ -203,23 +205,10 @@ def add_reference():
     return render_template("add_reference.html")
 
 
-class ArticleForm(Form):
-    bibtexkey = StringField("Name this reference for citing", validators=[validators.input_required()])
-    author = StringField("Author", validators=[validators.input_required()])
-    title = StringField("Title", validators=[validators.input_required()])
-    journal = StringField("Journal", validators=[validators.input_required()])
-    year = IntegerField("Year", validators=[validators.input_required()])
-    volume = IntegerField("Volume", validators=[validators.input_required()])
-    number = IntegerField("Number", validators=[validators.optional()])
-    pages = StringField("Pages", validators=[validators.optional()])
-    month = IntegerField("Month", validators=[validators.optional()])
-    note = StringField("Note", validators=[validators.optional()])
-
-
 @app.route("/add/article", methods=["GET", "POST"])
 def add_article():
     db = get_db()
-    form = ArticleForm(request.form)
+    form = forms.ArticleForm(request.form)
     if request.method == "POST" and form.validate():
         # Lisätään null jos valinnainen kenttä tyhjä
         number = 'NULL'
@@ -252,27 +241,10 @@ def add_article():
         return redirect("/refs")
     return render_template("add_article.html", form=form)
 
-
-class BookForm(Form):
-    bibtexkey = StringField("Name this reference for citing")
-    author = StringField("Author")
-    title = StringField("Title")
-    editor = StringField("Editor")
-    publisher = StringField("Publisher")
-    year = IntegerField("Year")
-    volume = IntegerField("Volume")
-    number = IntegerField("Number")
-    series = StringField("Series")
-    address = StringField("Address")
-    edition = StringField("Edition")
-    month = IntegerField("Month")
-    note = StringField("Note")
-
-
 @app.route("/add/book", methods=["GET", "POST"])
 def add_book():
     db = get_db()
-    form = BookForm(request.form)
+    form = forms.BookForm(request.form)
     if request.method == "POST" and form.validate():
         db.execute("""INSERT INTO books
         (bibtexkey, author, title, editor, publisher, year, volume, number, series, address, edition, month, note)
@@ -296,21 +268,11 @@ def add_book():
     return render_template("add_book.html", form=form)
 
 
-class BookletForm(Form):
-    bibtexkey = StringField("Name this reference for citing")
-    author = StringField("Author")
-    title = StringField("Title")
-    howpublished = StringField("How published")
-    address = IntegerField("Address")
-    month = IntegerField("Month")
-    year = IntegerField("Year")
-    note = StringField("Note")
-
 
 @app.route("/add/booklet", methods=["GET", "POST"])
 def add_booklet():
     db = get_db()
-    form = BookletForm(request.form)
+    form = forms.BookletForm(request.form)
     if request.method == "POST" and form.validate():
         db.execute("""INSERT INTO booklets
         (bibtexkey, author, title, howpublished, address, month, year, note)
@@ -328,29 +290,10 @@ def add_booklet():
         return redirect("/refs")
     return render_template("add_booklet.html", form=form)
 
-
-class ConferenceForm(Form):
-    bibtexkey = StringField("Name this reference for citing")
-    author = StringField("Author")
-    title = StringField("Title")
-    booktitle = StringField("Book title")
-    year = IntegerField("Year")
-    editor = StringField("Editor")
-    volume = IntegerField("Volume")
-    number = IntegerField("Number")
-    series = StringField("Series")
-    pages = StringField("Pages")
-    address = StringField("Address")
-    month = IntegerField("Month")
-    organization = StringField("Organization")
-    publisher = StringField("Publisher")
-    note = StringField("Note")
-
-
 @app.route("/add/conference", methods=["GET", "POST"])
 def add_conference():
     db = get_db()
-    form = ConferenceForm(request.form)
+    form = forms.ConferenceForm(request.form)
     if request.method == "POST" and form.validate():
         db.execute("""INSERT INTO conferences
         (bibtexkey, author, title, booktitle, year, editor, volume, number, series, pages, address, month, organization, publisher, note)
@@ -374,7 +317,6 @@ def add_conference():
         db.commit()
         return redirect("/refs")
     return render_template("add_conference.html", form=form)
-
 
 @app.route("/add/inproceedings", methods=["GET", "POST"])
 def add_inproceedings():
