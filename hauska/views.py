@@ -321,7 +321,7 @@ def add_conference():
 @app.route("/add/inproceedings", methods=["GET", "POST"])
 def add_inproceedings():
     db = get_db()
-    form = ConferenceForm(request.form)
+    form = forms.ConferenceForm(request.form)
     if request.method == "POST" and form.validate():
         db.execute("""INSERT INTO inproceedings
         (bibtexkey, author, title, booktitle, year, editor, volume, number, series, pages, address, month, organization, publisher, note)
