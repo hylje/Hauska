@@ -18,6 +18,12 @@
     <li>note = {{ ref.note }}</li>
 </ul>
 
+<p>
+    <form action="/delete" method="POST">
+        <input type="hidden" value="{{ ref.bibtexkey }}" name="bibtexkey" />
+        <input type="submit" value="Delete" />
+    </form>
+</p>
 {% else %}
 <h1>Article does not exist for some reason. Sorry about that.</h1>
 {% endif %}
