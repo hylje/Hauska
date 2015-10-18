@@ -204,6 +204,31 @@ def add_reference():
     # return render_template("add_reference.html", form=form)
     return render_template("add_reference.html")
 
+@app.route("/delete", methods=["POST"])
+def delete_reference():
+    key = request.form['bibtexkey']
+    delete_with_key(key)
+    return redirect("/refs")
+    
+def delete_with_key(key):
+    #koska bibtexkey on uniikki kaikilla tauluilla,
+    #vain yksi entry poistetaan
+    db = get_db()
+    del1 = """DELETE FROM articles WHERE bibtexkey = ?"""
+    db.execute(del1,[key])
+    db.commit()
+    del2 = """DELETE FROM books WHERE bibtexkey = ?"""
+    db.execute(del2,[key])
+    db.commit()
+    del3 = """DELETE FROM booklets WHERE bibtexkey = ?"""
+    db.execute(del3,[key])
+    db.commit()
+    del4 = """DELETE FROM conferences WHERE bibtexkey = ?"""
+    db.execute(del4,[key])
+    db.commit()
+    del5 = """DELETE FROM inproceedings WHERE bibtexkey = ?"""
+    db.execute(del5,[key])
+    db.commit()
 
 @app.route("/add/article", methods=["GET", "POST"])
 def add_article():
