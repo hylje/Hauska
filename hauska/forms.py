@@ -14,11 +14,11 @@ class BaseForm(Form):
             raise ValidationError("This reference name already exists")
 
 class ArticleForm(BaseForm):
-    author = StringField("Author", validators=[validators.input_required()])
-    title = StringField("Title", validators=[validators.input_required()])
-    journal = StringField("Journal", validators=[validators.input_required()])
-    year = IntegerField("Year", validators=[validators.input_required()])
-    volume = IntegerField("Volume", validators=[validators.input_required()])
+    author = StringField("Author *", validators=[validators.input_required()])
+    title = StringField("Title *", validators=[validators.input_required()])
+    journal = StringField("Journal *", validators=[validators.input_required()])
+    year = IntegerField("Year *", validators=[validators.input_required()])
+    volume = IntegerField("Volume *", validators=[validators.input_required()])
     number = IntegerField("Number", validators=[validators.optional()])
     pages = StringField("Pages", validators=[validators.optional()])
     month = IntegerField("Month", validators=[validators.optional()])
@@ -39,13 +39,13 @@ class BookForm(BaseForm):
     note = StringField("Note")
 
 class BookletForm(BaseForm):
-    author = StringField("Author")
-    title = StringField("Title")
-    howpublished = StringField("How published")
-    address = IntegerField("Address")
-    month = IntegerField("Month")
-    year = IntegerField("Year")
-    note = StringField("Note")
+    author = StringField("Author", validators=[validators.optional()])
+    title = StringField("Title *", validators=[validators.input_required()])
+    howpublished = StringField("How published", validators=[validators.optional()])
+    address = IntegerField("Address", validators=[validators.optional()])
+    month = IntegerField("Month", validators=[validators.optional()])
+    year = IntegerField("Year", validators=[validators.optional()])
+    note = StringField("Note", validators=[validators.optional()])
 
 class ConferenceForm(BaseForm):
     author = StringField("Author")
