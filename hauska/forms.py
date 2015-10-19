@@ -25,19 +25,19 @@ class ArticleForm(BaseForm):
     note = StringField("Note", validators=[validators.optional()])
 
 #TODO book validaattorit
-class BookForm(BaseForm): 
-    author = StringField("Author")
-    title = StringField("Title")
-    editor = StringField("Editor")
-    publisher = StringField("Publisher")
-    year = IntegerField("Year")
-    volume = IntegerField("Volume")
-    number = IntegerField("Number")
-    series = StringField("Series")
-    address = StringField("Address")
-    edition = StringField("Edition")
-    month = IntegerField("Month")
-    note = StringField("Note")
+class BookForm(BaseForm):
+    author = StringField("Author *", validators=[validators.input_required()])
+    title = StringField("Title *", validators=[validators.input_required()])
+    editor = StringField("Editor *", validators=[validators.input_required()])
+    publisher = StringField("Publisher *", validators=[validators.input_required()])
+    year = IntegerField("Year *", validators=[validators.input_required()])
+    volume = IntegerField("Volume", validators=[validators.optional()])
+    number = IntegerField("Number", validators=[validators.optional()])
+    series = StringField("Series", validators=[validators.optional()])
+    address = StringField("Address", validators=[validators.optional()])
+    edition = StringField("Edition", validators=[validators.optional()])
+    month = IntegerField("Month", validators=[validators.optional()])
+    note = StringField("Note", validators=[validators.optional()])
 
 class BookletForm(BaseForm):
     author = StringField("Author", validators=[validators.optional()])
