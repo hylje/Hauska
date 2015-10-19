@@ -1,0 +1,29 @@
+<!doctype html>
+{% from "_formhelpers.html" import render_field %}
+
+<h1>Edit Book</h1>
+
+<a href="/book/{{ ref.id }}">Go back without editing</a>
+
+<p>Bibtexkey = {{ ref.bibtexkey }}</p>
+<form method="post" action="">
+<element hidden>{{ render_field(form.bibtexkey) }}</element>
+  <dl>
+    {{ render_field(form.title) }}
+    {{ render_field(form.author) }}
+    {{ render_field(form.editor) }}
+    {{ render_field(form.publisher) }}
+    {{ render_field(form.year) }}
+    {{ render_field(form.volume) }}
+    {{ render_field(form.number) }}
+    {{ render_field(form.series) }}
+    {{ render_field(form.address) }}
+    {{ render_field(form.edition) }}
+    {{ render_field(form.month) }}
+    {{ render_field(form.note) }}
+  </dl>
+  <p>* required</p>
+  <p>
+    <input type="submit" value="Edit">
+  </p>
+</form>

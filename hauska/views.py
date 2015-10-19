@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 
 
 from hauska import app, get_db
@@ -14,12 +14,11 @@ def hello():
     return render_template("index.html")
 
 
-@app.route("/article/<id>")
-def view_article(id):
+def select_article(id):
     db = get_db()
     cur = db.execute('select * from articles where id = ?',
                      [id])
-    ref = [dict(id=row[0],
+    return [dict(id=row[0],
                 bibtexkey=row[1],
                 author=row[2],
                 title=row[3],
@@ -30,15 +29,16 @@ def view_article(id):
                 pages=row[8],
                 month=row[9],
                 note=row[10]) for row in cur.fetchall()]
+
+@app.route("/article/<id>")
+def view_article(id):
+    ref = select_article(id)
     return render_template("view_article.html", ref=ref[0])
 
-
-@app.route("/book/<id>")
-def view_book(id):
+def select_book(id):
     db = get_db()
-    cur = db.execute('select * from books where id = ?',
-                     [id])
-    ref = [dict(id=row[0],
+    cur = db.execute('select * from books where id = ?',[id])
+    return [dict(id=row[0],
                 bibtexkey=row[1],
                 title=row[2],
                 author=row[3],
@@ -52,15 +52,17 @@ def view_book(id):
                 edition=row[11],
                 month=row[12],
                 note=row[13]) for row in cur.fetchall()]
+
+@app.route("/book/<id>")
+def view_book(id):
+    ref = select_book(id)
     return render_template("view_book.html", ref=ref[0])
 
-
-@app.route("/booklet/<id>")
-def view_booklet(id):
+def select_booklet(id):
     db = get_db()
     cur = db.execute('select * from booklets where id = ?',
                      [id])
-    ref = [dict(id=row[0],
+    return [dict(id=row[0],
                 bibtexkey=row[1],
                 title=row[2],
                 author=row[3],
@@ -69,15 +71,17 @@ def view_booklet(id):
                 month=row[6],
                 year=row[7],
                 note=row[8]) for row in cur.fetchall()]
+
+@app.route("/booklet/<id>")
+def view_booklet(id):
+    ref = select_booklet(id)
     return render_template("view_booklet.html", ref=ref[0])
-
-
-@app.route("/conference/<id>")
-def view_conference(id):
+    
+def select_conference(id):
     db = get_db()
     cur = db.execute('select * from conferences where id = ?',
                      [id])
-    ref = [dict(id=row[0],
+    return [dict(id=row[0],
                 bibtexkey=row[1],
                 author=row[2],
                 title=row[3],
@@ -93,15 +97,17 @@ def view_conference(id):
                 organization=row[13],
                 publisher=row[14],
                 note=row[15]) for row in cur.fetchall()]
+
+@app.route("/conference/<id>")
+def view_conference(id):
+    ref = select_conference(id)
     return render_template("view_conference.html", ref=ref[0])
 
-
-@app.route("/inproceedings/<id>")
-def view_inproceedings(id):
+def select_inproceedings(id):
     db = get_db()
     cur = db.execute('select * from inproceedings where id = ?',
                      [id])
-    ref = [dict(id=row[0],
+    return [dict(id=row[0],
                 bibtexkey=row[1],
                 author=row[2],
                 title=row[3],
@@ -117,6 +123,10 @@ def view_inproceedings(id):
                 organization=row[13],
                 publisher=row[14],
                 note=row[15]) for row in cur.fetchall()]
+
+@app.route("/inproceedings/<id>")
+def view_inproceedings(id):
+    ref = select_inproceedings(id)
     return render_template("view_inproceedings.html", ref=ref[0])
 
 
@@ -230,24 +240,219 @@ def delete_with_key(key):
     db.execute(del5,[key])
     db.commit()
 
+@app.route("/article/<id>/edit", methods=["GET", "POST"])
+def edit_article(id):
+    ref = select_article(id)[0]
+    form = forms.ArticleForm(request.form)
+    if request.method == "GET":
+        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
+        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
+        form.author.data = ref['author']
+        form.title.data = ref['title']
+        form.journal.data = ref['journal']
+        form.year.data = ref['year']
+        form.volume.data = ref['volume']
+        if ref['number'] != 'NULL':
+            form.number.data = ref['number']
+        form.pages.data = ref['pages']
+        if ref['month'] != 'NULL':
+            form.month.data = ref['month']
+        form.note.data = ref['note']
+    if request.method == "POST" and form.validate():
+        db = get_db()
+        db.execute("""UPDATE articles SET author = ?, title = ?, journal = ?, year = ?,
+            volume = ?, number = ?, pages = ?, month = ?, note = ? WHERE bibtexkey = ?""",
+                   [form.author.data,
+                    form.title.data,
+                    form.journal.data,
+                    form.year.data,
+                    form.volume.data,
+                    form.number.data,
+                    form.pages.data,
+                    form.month.data,
+                    form.note.data,
+                    ref['bibtexkey']])
+        db.commit()
+        return redirect(url_for("view_article", id=id))
+    return render_template("edit_article.html", form=form, ref=ref)
+
+@app.route("/book/<id>/edit", methods=["GET", "POST"])
+def edit_book(id):
+    ref = select_book(id)[0]
+    form = forms.BookForm(request.form)
+    if request.method == "GET":
+        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
+        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
+        form.title.data = ref['title']
+        form.author.data = ref['author']
+        form.editor.data = ref['editor']
+        form.publisher.data = ref['publisher']
+        form.year.data = ref['year']
+        if ref['volume'] != 'NULL':
+            form.volume.data = ref['volume']
+        if ref['number'] != 'NULL':
+            form.number.data = ref['number']
+        form.series.data = ref['series']
+        form.address.data = ref['address']
+        form.edition.data = ref['edition']
+        if ref['month'] != 'NULL':
+            form.month.data = ref['month']
+        form.note.data = ref['note']
+    if request.method == "POST" and form.validate():
+        db = get_db()
+        db.execute("""UPDATE books SET title = ?, author = ?, editor = ?, publisher = ?,
+            year = ?, volume = ?, number = ?, series = ?, address = ?,  edition = ?, 
+            month = ?, note = ? WHERE bibtexkey = ?""",
+                   [form.title.data,
+                    form.author.data,
+                    form.editor.data,
+                    form.publisher.data,
+                    form.year.data,
+                    form.volume.data,
+                    form.number.data,
+                    form.series.data,
+                    form.address.data,
+                    form.edition.data,
+                    form.month.data,
+                    form.note.data,
+                    ref['bibtexkey']])
+        db.commit()
+        return redirect(url_for("view_book", id=id))
+    return render_template("edit_book.html", form=form, ref=ref)
+
+@app.route("/booklet/<id>/edit", methods=["GET", "POST"])
+def edit_booklet(id):
+    ref = select_booklet(id)[0]
+    form = forms.BookletForm(request.form)
+    if request.method == "GET":
+        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
+        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
+        form.title.data = ref['title']
+        form.author.data = ref['author']
+        form.howpublished.data = ref['howpublished']
+        form.address.data = ref['address']
+        if ref['month'] != 'NULL':
+            form.month.data = ref['month']
+        if ref['year'] != 'NULL':
+            form.year.data = ref['year']
+        form.note.data = ref['note']
+    if request.method == "POST" and form.validate():
+        db = get_db()
+        db.execute("""UPDATE booklets SET title = ?, author = ?, howpublished = ?, address = ?,
+            month = ?, year = ?, note = ? WHERE bibtexkey = ?""",
+                   [form.title.data,
+                    form.author.data,
+                    form.howpublished.data,
+                    form.address.data,
+                    form.month.data,
+                    form.year.data,
+                    form.note.data,
+                    ref['bibtexkey']])
+        db.commit()
+        return redirect(url_for("view_booklet", id=id))
+    return render_template("edit_booklet.html", form=form, ref=ref)
+    
+@app.route("/conference/<id>/edit", methods=["GET", "POST"])
+def edit_conference(id):
+    ref = select_conference(id)[0]
+    form = forms.ConferenceForm(request.form)
+    if request.method == "GET":
+        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
+        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
+        form.author.data = ref['author']
+        form.title.data = ref['title']
+        form.booktitle.data = ref['booktitle']
+        form.year.data = ref['year']
+        form.editor.data = ref['editor']
+        if ref['volume'] != 'NULL':
+            form.volume.data = ref['volume']
+        if ref['number'] != 'NULL':
+            form.number.data = ref['number']
+        form.series.data = ref['series']
+        form.pages.data = ref['pages']
+        form.address.data = ref['address']
+        if ref['month'] != 'NULL':
+            form.month.data = ref['month']
+        form.organization.data = ref['organization']
+        form.publisher.data = ref['publisher']
+        form.note.data = ref['note']
+    if request.method == "POST" and form.validate():
+        db = get_db()
+        db.execute("""UPDATE conferences SET author = ?, title = ?, booktitle = ?, year = ?,
+            editor = ?, volume = ?, number = ?, series = ?, pages = ?, address = ?, 
+            month = ?, organization = ?, publisher = ?, note = ? WHERE bibtexkey = ?""",
+                   [form.author.data,
+                    form.title.data,
+                    form.booktitle.data,
+                    form.year.data,
+                    form.editor.data,
+                    form.volume.data,
+                    form.number.data,
+                    form.series.data,
+                    form.pages.data,
+                    form.address.data,
+                    form.month.data,
+                    form.organization.data,
+                    form.publisher.data,
+                    form.note.data,
+                    ref['bibtexkey']])
+        db.commit()
+        return redirect(url_for("view_conference", id=id))
+    return render_template("edit_conference.html", form=form, ref=ref)
+    
+@app.route("/inproceedings/<id>/edit", methods=["GET", "POST"])
+def edit_inproceedings(id):
+    ref = select_inproceedings(id)[0]
+    form = forms.ConferenceForm(request.form)
+    if request.method == "GET":
+        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
+        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
+        form.author.data = ref['author']
+        form.title.data = ref['title']
+        form.booktitle.data = ref['booktitle']
+        form.year.data = ref['year']
+        form.editor.data = ref['editor']
+        if ref['volume'] != 'NULL':
+            form.volume.data = ref['volume']
+        if ref['number'] != 'NULL':
+            form.number.data = ref['number']
+        form.series.data = ref['series']
+        form.pages.data = ref['pages']
+        form.address.data = ref['address']
+        if ref['month'] != 'NULL':
+            form.month.data = ref['month']
+        form.organization.data = ref['organization']
+        form.publisher.data = ref['publisher']
+        form.note.data = ref['note']
+    if request.method == "POST" and form.validate():
+        db = get_db()
+        db.execute("""UPDATE inproceedings SET author = ?, title = ?, booktitle = ?, year = ?,
+            editor = ?, volume = ?, number = ?, series = ?, pages = ?, address = ?, 
+            month = ?, organization = ?, publisher = ?, note = ? WHERE bibtexkey = ?""",
+                   [form.author.data,
+                    form.title.data,
+                    form.booktitle.data,
+                    form.year.data,
+                    form.editor.data,
+                    form.volume.data,
+                    form.number.data,
+                    form.series.data,
+                    form.pages.data,
+                    form.address.data,
+                    form.month.data,
+                    form.organization.data,
+                    form.publisher.data,
+                    form.note.data,
+                    ref['bibtexkey']])
+        db.commit()
+        return redirect(url_for("view_inproceedings", id=id))
+    return render_template("edit_inproceedings.html", form=form, ref=ref)
+
 @app.route("/add/article", methods=["GET", "POST"])
 def add_article():
     db = get_db()
     form = forms.ArticleForm(request.form)
     if request.method == "POST" and form.validate():
-        # Lisätään null jos valinnainen kenttä tyhjä
-        number = 'NULL'
-        if form.number.data is not None:
-            number = form.number.data
-        pages = 'NULL'
-        if form.pages.data is not None:
-            pages = form.pages.data
-        month = 'NULL'
-        if form.month.data is not None:
-            month = form.month.data
-        note = 'NULL'
-        if form.note.data is not None:
-            note = form.note.data
         db.execute("""INSERT INTO articles
         (bibtexkey, author, title, journal, year, volume, number, pages, month, note)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -258,10 +463,10 @@ def add_article():
                     form.journal.data,
                     form.year.data,
                     form.volume.data,
-                    number,
-                    pages,
-                    month,
-                    note])
+                    form.number.data,
+                    form.pages.data,
+                    form.month.data,
+                    form.note.data])
         db.commit()
         return redirect("/refs")
     return render_template("add_article.html", form=form)

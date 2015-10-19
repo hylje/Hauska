@@ -24,7 +24,8 @@ class ArticleForm(BaseForm):
     month = IntegerField("Month", validators=[validators.optional()])
     note = StringField("Note", validators=[validators.optional()])
 
-class BookForm(BaseForm):
+#TODO book validaattorit
+class BookForm(BaseForm): 
     author = StringField("Author")
     title = StringField("Title")
     editor = StringField("Editor")
