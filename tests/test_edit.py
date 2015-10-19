@@ -13,6 +13,11 @@ class EditTestCase(HauskaTestCase, AddMixin):
         dummy_data = dict(getattr(self, "%s_dummy_data" % reftype))
         dummy_data.update({"author": random_author})
 
+        get_rv = self.app.get("/%s/1/edit" % reftype)
+
+        self.assertEqual(get_rv.status_code, 200)
+        self.assertIn("123", get_rv.data)
+
         post_rv = self.app.post(
             "/%s/1/edit" % reftype,
             data=dummy_data,

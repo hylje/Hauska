@@ -201,3 +201,43 @@ class AddTestCase(HauskaTestCase, AddMixin):
         self.assertEqual(cur.fetchone()[0], 1)
         self.assertEqual(rv.status_code, 200)
         self.assertIn("bibtex key: 5", rv.data)
+
+    def testArticleRequiredFields(self):
+        rv = self._postArticle({"author": ""})
+
+        db = hauska.get_db()
+        cur = db.execute("SELECT count(1) FROM articles")
+        self.assertEqual(cur.fetchone()[0], 0)
+        self.assertIn("This field is required.", rv.data)
+
+    def testBookRequiredFields(self):
+        rv = self._postBook({"author": ""})
+
+        db = hauska.get_db()
+        cur = db.execute("SELECT count(1) FROM books")
+        self.assertEqual(cur.fetchone()[0], 0)
+        self.assertIn("This field is required.", rv.data)
+
+    def testBookletRequiredFields(self):
+        rv = self._postBooklet({"title": ""})
+
+        db = hauska.get_db()
+        cur = db.execute("SELECT count(1) FROM booklets")
+        self.assertEqual(cur.fetchone()[0], 0)
+        self.assertIn("This field is required.", rv.data)
+
+    def testConferenceRequiredFields(self):
+        rv = self._postConference({"title": ""})
+
+        db = hauska.get_db()
+        cur = db.execute("SELECT count(1) FROM conferences")
+        self.assertEqual(cur.fetchone()[0], 0)
+        self.assertIn("This field is required.", rv.data)
+
+    def testInproceedingsRequiredFields(self):
+        rv = self._postInproceedings({"title": ""})
+
+        db = hauska.get_db()
+        cur = db.execute("SELECT count(1) FROM inproceedings")
+        self.assertEqual(cur.fetchone()[0], 0)
+        self.assertIn("This field is required.", rv.data)

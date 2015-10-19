@@ -81,3 +81,61 @@ class BibtexTestCase(HauskaTestCase, AddMixin):
         self.assertEqual(cur.fetchone()[0], 0)
 
         self.assertIn("This reference name already exists", rv.data)
+
+    def testFullBibtexRenders(self):
+        self._postArticle()
+        self._postBook()
+        self._postBooklet()
+        self._postConference()
+        self._postInproceedings()
+
+        rv = self.app.get("/refs/bib")
+
+        self.assertIn("@article{1", rv.data)
+        self.assertIn("@book{2", rv.data)
+        self.assertIn("@booklet{3", rv.data)
+        self.assertIn("@conference{4", rv.data)
+        self.assertIn("@inproceedings{5", rv.data)
+
+    def testArticleBibRenders(self):
+        self._postArticle()
+
+        rv = self.app.get("/article/1/bib")
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("@article{1", rv.data)
+
+    def testBookBibRenders(self):
+        self._postBook()
+
+        rv = self.app.get("/book/1/bib")
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("@book{2", rv.data)
+
+
+    def testBookletBibRenders(self):
+        self._postBooklet()
+
+        rv = self.app.get("/booklet/1/bib")
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("@booklet{3", rv.data)
+
+
+    def testConferenceBibRenders(self):
+        self._postConference()
+
+        rv = self.app.get("/conference/1/bib")
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("@conference{4", rv.data)
+
+
+    def testBookBibRenders(self):
+        self._postInproceedings()
+
+        rv = self.app.get("/inproceedings/1/bib")
+
+        self.assertEqual(rv.status_code, 200)
+        self.assertIn("@inproceedings{5", rv.data)
