@@ -76,7 +76,7 @@ def select_booklet(id):
 def view_booklet(id):
     ref = select_booklet(id)
     return render_template("view_booklet.html", ref=ref[0])
-    
+
 def select_conference(id):
     db = get_db()
     cur = db.execute('select * from conferences where id = ?',
@@ -219,7 +219,7 @@ def delete_reference():
     key = request.form['bibtexkey']
     delete_with_key(key)
     return redirect("/refs")
-    
+
 def delete_with_key(key):
     #koska bibtexkey on uniikki kaikilla tauluilla,
     #vain yksi entry poistetaan
@@ -244,9 +244,8 @@ def delete_with_key(key):
 def edit_article(id):
     ref = select_article(id)[0]
     form = forms.ArticleForm(request.form)
+    del form.bibtexkey
     if request.method == "GET":
-        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
-        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
         form.author.data = ref['author']
         form.title.data = ref['title']
         form.journal.data = ref['journal']
@@ -280,9 +279,10 @@ def edit_article(id):
 def edit_book(id):
     ref = select_book(id)[0]
     form = forms.BookForm(request.form)
+    del form.bibtexkey
     if request.method == "GET":
         #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
-        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
+        #form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
         form.title.data = ref['title']
         form.author.data = ref['author']
         form.editor.data = ref['editor']
@@ -301,7 +301,7 @@ def edit_book(id):
     if request.method == "POST" and form.validate():
         db = get_db()
         db.execute("""UPDATE books SET title = ?, author = ?, editor = ?, publisher = ?,
-            year = ?, volume = ?, number = ?, series = ?, address = ?,  edition = ?, 
+            year = ?, volume = ?, number = ?, series = ?, address = ?,  edition = ?,
             month = ?, note = ? WHERE bibtexkey = ?""",
                    [form.title.data,
                     form.author.data,
@@ -324,9 +324,8 @@ def edit_book(id):
 def edit_booklet(id):
     ref = select_booklet(id)[0]
     form = forms.BookletForm(request.form)
+    del form.bibtexkey
     if request.method == "GET":
-        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
-        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
         form.title.data = ref['title']
         form.author.data = ref['author']
         form.howpublished.data = ref['howpublished']
@@ -351,14 +350,13 @@ def edit_booklet(id):
         db.commit()
         return redirect(url_for("view_booklet", id=id))
     return render_template("edit_booklet.html", form=form, ref=ref)
-    
+
 @app.route("/conference/<id>/edit", methods=["GET", "POST"])
 def edit_conference(id):
     ref = select_conference(id)[0]
     form = forms.ConferenceForm(request.form)
+    del form.bibtexkey
     if request.method == "GET":
-        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
-        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
         form.author.data = ref['author']
         form.title.data = ref['title']
         form.booktitle.data = ref['booktitle']
@@ -379,7 +377,7 @@ def edit_conference(id):
     if request.method == "POST" and form.validate():
         db = get_db()
         db.execute("""UPDATE conferences SET author = ?, title = ?, booktitle = ?, year = ?,
-            editor = ?, volume = ?, number = ?, series = ?, pages = ?, address = ?, 
+            editor = ?, volume = ?, number = ?, series = ?, pages = ?, address = ?,
             month = ?, organization = ?, publisher = ?, note = ? WHERE bibtexkey = ?""",
                    [form.author.data,
                     form.title.data,
@@ -399,14 +397,13 @@ def edit_conference(id):
         db.commit()
         return redirect(url_for("view_conference", id=id))
     return render_template("edit_conference.html", form=form, ref=ref)
-    
+
 @app.route("/inproceedings/<id>/edit", methods=["GET", "POST"])
 def edit_inproceedings(id):
     ref = select_inproceedings(id)[0]
     form = forms.ConferenceForm(request.form)
+    del form.bibtexkey
     if request.method == "GET":
-        #validaattorin kierto käyttämällä epätodennäköistä placeholder avainta
-        form.bibtexkey.data = ref['bibtexkey']+'_*EDIT*_#EDIT#'
         form.author.data = ref['author']
         form.title.data = ref['title']
         form.booktitle.data = ref['booktitle']
@@ -427,7 +424,7 @@ def edit_inproceedings(id):
     if request.method == "POST" and form.validate():
         db = get_db()
         db.execute("""UPDATE inproceedings SET author = ?, title = ?, booktitle = ?, year = ?,
-            editor = ?, volume = ?, number = ?, series = ?, pages = ?, address = ?, 
+            editor = ?, volume = ?, number = ?, series = ?, pages = ?, address = ?,
             month = ?, organization = ?, publisher = ?, note = ? WHERE bibtexkey = ?""",
                    [form.author.data,
                     form.title.data,
