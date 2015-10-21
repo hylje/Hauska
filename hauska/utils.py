@@ -8,7 +8,7 @@ def plaintext_response(f):
         return app.make_response((
             f(*args, **kwargs),
             200,
-            [("Content-Type", "text/plain")]
+            [("Content-Type", "text/plain; charset=utf-8")]
         ))
     return wrapper
 
