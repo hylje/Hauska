@@ -7,6 +7,8 @@ Miniohtuprojekti "Hauska"
 
 [Projektin Trello-lauta](https://trello.com/b/RsZjXJTB/hauska-ryhma)
 
+[Miniohtu-raportti](https://drive.google.com/file/d/0B_b_5sryDhjubTRhUTRRdmFkaGs/view) [PDF]
+
 Asenna:
 ---
 
